@@ -1,0 +1,50 @@
+#Input: square matrix with unique entries 1 through n**2
+#Output: Boolean: if the square matrix is a magic square
+def MagicSquare(matrix):
+  #Ensure all digits are unique and within 1 through n**2
+  digits=[]
+  for i in range(len(matrix)):
+    for j in range(len(matrix)):
+        if (matrix[i][j]<=0) or matrix[i][j]>len(matrix)**2: #Check bounds
+          return False #Return false if bounds are violated
+        else:
+          digits.append(matrix[i][j]) #Input number in digits matrix
+  for i in range(len(digits)-1):
+    for j in range(i+1, len(digits)):
+      if digits[i]==digits[j]: #Check uniqueness of each digit
+        return False #Return false if there are two equal entries
+  A=[]  #initialize list of sums
+  for i in range(len(matrix)):  #Row sum calculations
+    A.append(0)
+    for j in range(len(matrix)):
+      A[i]=A[i]+matrix[i][j]
+  for i in range(len(A)-1):    #Check for equality of row sums
+    if A[i]!=A[i+1]:
+      return False
+  if A[-1]!=A[0]:
+    return False
+  A.append(0)      #Create entry in A for left to right diagonal sum
+  A.append(0)      #Create entry in A for right to left diagonal sum
+  for i in range(len(matrix)):
+    A[-2]=A[-2]+matrix[i][i]    #Calculate left to right diagonal sum
+    A[-1]=A[-1]+matrix[-i][-i]  #Calculate right to left diagonal sum
+  for i in (1,2):
+    if A[-i]!=A[0]:            #Check if diagonal sums equal row sums  
+      return False
+  for i in range(len(matrix)):    #Create entries for column sums
+    A.append(0)
+    for j in range(len(matrix)):
+      A[-1]=A[-1]+matrix[j][i]     #Caclulate column sums
+  for i in range(1,len(matrix)):
+    if A[-i]!=A[0]:            #Check column sums are equal to row sums
+      return False
+  return True        #Return true if all conditions are passed
+
+matrixA=[[4,9,2],[3,5,7],[8,1,6]]
+matrixB=[[2,7,6],[9,5,1],[4,3,8]]
+matrixC=[[1,2,3],[3,4,5],[7,8,9]]
+matrixD=[[5,9,2],[3,5,5],[8,1,6]]
+print(MagicSquare(matrixA))
+print(MagicSquare(matrixB))
+print(MagicSquare(matrixC))
+print(MagicSquare(matrixD))
